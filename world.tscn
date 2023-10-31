@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://dbp6ofomd7bts"]
+
+[ext_resource type="PackedScene" uid="uid://dsu3l4lt7sx1n" path="res://player.tscn" id="1_q54pr"]
+[ext_resource type="PackedScene" uid="uid://baa5bskhkprqx" path="res://grass_block.tscn" id="2_20360"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_txniy"]
+data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_yfxtp"]
+size = Vector2(10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jl25"]
+albedo_color = Color(0.352941, 0.811765, 0.235294, 1)
+roughness = 0.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7nmu1"]
+
+[node name="World" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("ConcavePolygonShape3D_txniy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_yfxtp")
+surface_material_override/0 = SubResource("StandardMaterial3D_8jl25")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.58174, 1.0839, -1.99332)
+mesh = SubResource("CylinderMesh_7nmu1")
+skeleton = NodePath("")
+
+[node name="Player" parent="." instance=ExtResource("1_q54pr")]
+
+[node name="Grass" type="Node3D" parent="."]
+
+[node name="MultiMeshInstance3D2" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.056591, 1.19209e-07, 1.77426)
+
+[node name="MultiMeshInstance3D3" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04702, 1.19209e-07, 1.77426)
+
+[node name="MultiMeshInstance3D4" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16271, 1.19209e-07, 1.77426)
+
+[node name="MultiMeshInstance3D5" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16271, 1.19209e-07, 2.93855)
+
+[node name="MultiMeshInstance3D6" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42032, 1.19209e-07, 2.93855)
+
+[node name="MultiMeshInstance3D7" parent="Grass" instance=ExtResource("2_20360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.527454, 1.19209e-07, 2.68891)
