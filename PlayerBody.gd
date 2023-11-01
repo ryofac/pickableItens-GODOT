@@ -7,7 +7,13 @@ const JUMP_VELOCITY = 4.5
 @onready var mainCamera: Camera3D = $MainCamera
 
 var camera_rotation = Vector2(0,0)
-var camera_sensivity = 0.01
+var camera_sensivity = 0.001
+
+#Variaveis de controle
+var grabbing: bool = false
+var hasTarget: bool = false
+
+var grabbingObject: PickableObject = null
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -26,7 +32,11 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		var mouse_event = event.relative * camera_sensivity
 		camera_look(mouse_event)
-		
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if grabbing: grabbing = false
+			if hasTarget: grabbing = true
+
 func camera_look(mouse_movement):
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		return
@@ -50,7 +60,7 @@ func handle_movement(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_front", "move_back")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	print(direction)
+#	print(direction)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -66,5 +76,24 @@ func _physics_process(delta):
 	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 		return
 	handle_movement(delta);
-
 	
+	if grabbing:
+#		grabbingObject.is_pointed = false
+		var actualPosition = grabbingObject.position
+		var targetPosition = $MainCamera/Area3D/GrabbingPointer.global_position;
+		grabbingObject.position.x = move_toward(actualPosition.x, targetPosition.x, 1)
+		grabbingObject.position.y = move_toward(actualPosition.y, targetPosition.y, 1)
+		grabbingObject.position.z = move_toward(actualPosition.z, targetPosition.z, 1)
+
+func _on_area_3d_body_entered(body):
+	if body is PickableObject:
+		hasTarget = true
+		
+		grabbingObject = body;
+		
+func _on_area_3d_body_exited(body):
+	if body is PickableObject:
+		hasTarget = false
+		
+		if body != grabbingObject:
+			grabbingObject = null
