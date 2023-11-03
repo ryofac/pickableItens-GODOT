@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bie00x0ig2nw"]
+
+[ext_resource type="Script" path="res://Areas/PlacedArea.gd" id="1_oygxq"]
+
+[node name="PlacedArea" type="StaticBody3D"]
+script = ExtResource("1_oygxq")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+
+[node name="Marker3D" type="Marker3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]

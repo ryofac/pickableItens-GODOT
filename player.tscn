@@ -18,23 +18,57 @@ script = ExtResource("1_fe14q")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerBody"]
 shape = SubResource("CapsuleShape3D_6v5x8")
 
-[node name="MainCamera" type="Camera3D" parent="PlayerBody"]
+[node name="Camera" type="Node3D" parent="PlayerBody"]
+
+[node name="MainCamera" type="Camera3D" parent="PlayerBody/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.688291, 0)
 current = true
 
-[node name="Area3D" type="Area3D" parent="PlayerBody/MainCamera"]
+[node name="Area3D" type="Area3D" parent="PlayerBody/Camera/MainCamera"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerBody/MainCamera/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerBody/Camera/MainCamera/Area3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 shape = SubResource("SeparationRayShape3D_443mq")
 
-[node name="GrabbingPointer" type="Marker3D" parent="PlayerBody/MainCamera/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.679402, -0.612735, -1.10048)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerBody/MainCamera/Area3D/GrabbingPointer"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+[node name="GrabbingPointer" type="Marker3D" parent="PlayerBody/Camera/MainCamera/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.493564, -0.352877, -0.65667)
 visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerBody/Camera/MainCamera/Area3D/GrabbingPointer"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 mesh = SubResource("SphereMesh_kycks")
 
-[connection signal="body_entered" from="PlayerBody/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_entered"]
-[connection signal="body_exited" from="PlayerBody/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_exited"]
+[node name="CrossAim" type="Control" parent="PlayerBody/Camera"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PlayerBody/Camera/CrossAim"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "+
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_exited"]

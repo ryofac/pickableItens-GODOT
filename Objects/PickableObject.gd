@@ -1,6 +1,8 @@
 extends RigidBody3D
 class_name PickableObject
 
+var typeObjectName: String
+
 var picked: bool = false
 #var is_pointed: bool = false
 @onready var area = $MeshInstance3D/Area3D
@@ -11,8 +13,10 @@ func _ready():
 	mesh_highlight.visible = false
 
 func _process(delta):
+	if picked: 
+		mesh_highlight.visible = false;
 	$CollisionShape3D.disabled = picked;
-	if picked: mesh_highlight.visible = false;
+	
 #	mesh_highlight.visible = is_pointed;
 	
 

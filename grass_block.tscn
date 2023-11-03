@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://baa5bskhkprqx"]
 
-[ext_resource type="Shader" uid="uid://dnhj3dwr4lca1" path="res://grass_shader.tres" id="1_ommfx"]
+[ext_resource type="Shader" uid="uid://dnhj3dwr4lca1" path="res://Shaders/grass_shader.tres" id="1_ommfx"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_8nc1i"]
 fractal_type = 0

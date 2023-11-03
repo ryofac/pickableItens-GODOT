@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dbp6ofomd7bts"]
+[gd_scene load_steps=20 format=3 uid="uid://dbp6ofomd7bts"]
 
 [ext_resource type="PackedScene" uid="uid://dsu3l4lt7sx1n" path="res://player.tscn" id="1_q54pr"]
 [ext_resource type="PackedScene" uid="uid://baa5bskhkprqx" path="res://grass_block.tscn" id="2_20360"]
+[ext_resource type="Script" path="res://Objects/sphere.gd" id="3_640nm"]
 [ext_resource type="PackedScene" uid="uid://dba7s1aemlte8" path="res://Objects/sphere.tscn" id="3_tdu5a"]
+[ext_resource type="PackedScene" uid="uid://blev415teuhc7" path="res://Areas/sphere_area.tscn" id="5_6o3t1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7htin"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -29,8 +31,31 @@ roughness = 0.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_7nmu1"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_ggb16"]
+radius = 0.25
+height = 0.5
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lo2ae"]
 albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0cgkc"]
+radius = 0.267716
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lyq4s"]
+radius = 0.26924
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yugst"]
+cull_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 0, 1)
+disable_receive_shadows = true
+grow = true
+grow_amount = 0.015
+
+[sub_resource type="SphereMesh" id="SphereMesh_315mn"]
+material = SubResource("StandardMaterial3D_yugst")
+radius = 0.25
+height = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yao5"]
 albedo_color = Color(0, 1, 0, 1)
@@ -81,11 +106,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42032, 1.19209e-07, 2.9385
 [node name="MultiMeshInstance3D7" parent="Grass" instance=ExtResource("2_20360")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.527454, 1.19209e-07, 2.68891)
 
-[node name="Sphere" parent="." instance=ExtResource("3_tdu5a")]
+[node name="Sphere" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.614346, 2)
+script = ExtResource("3_640nm")
 
-[node name="MeshInstance3D" parent="Sphere" index="0"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sphere"]
+mesh = SubResource("SphereMesh_ggb16")
 surface_material_override/0 = SubResource("StandardMaterial3D_lo2ae")
+
+[node name="Area3D" type="Area3D" parent="Sphere/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sphere/MeshInstance3D/Area3D"]
+shape = SubResource("SphereShape3D_0cgkc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sphere"]
+shape = SubResource("SphereShape3D_lyq4s")
+
+[node name="Highligh" type="Node3D" parent="Sphere"]
+
+[node name="MeshHighlight" type="MeshInstance3D" parent="Sphere/Highligh"]
+mesh = SubResource("SphereMesh_315mn")
 
 [node name="Sphere2" parent="." instance=ExtResource("3_tdu5a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55638, 0.495273, -0.879398)
@@ -93,5 +133,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55638, 0.495273, -0.879398
 [node name="MeshInstance3D" parent="Sphere2" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_7yao5")
 
-[editable path="Sphere"]
+[node name="SphereArea" parent="." instance=ExtResource("5_6o3t1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.299608, 4)
+
+[connection signal="area_entered" from="Sphere/MeshInstance3D/Area3D" to="Sphere" method="_on_area_3d_area_entered" flags=18]
+[connection signal="area_exited" from="Sphere/MeshInstance3D/Area3D" to="Sphere" method="_on_area_3d_area_exited" flags=18]
+
 [editable path="Sphere2"]

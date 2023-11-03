@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dba7s1aemlte8"]
 
-[ext_resource type="PackedScene" uid="uid://diipowf8nx5ks" path="res://PickableObject.tscn" id="1_do6yx"]
+[ext_resource type="PackedScene" uid="uid://diipowf8nx5ks" path="res://Objects/PickableObject.tscn" id="1_do6yx"]
 [ext_resource type="Script" path="res://Objects/sphere.gd" id="2_eo2ql"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ggb16"]

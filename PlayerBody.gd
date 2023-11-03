@@ -4,7 +4,8 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-@onready var mainCamera: Camera3D = $MainCamera
+@onready var mainCamera = $Camera
+
 
 var camera_rotation = Vector2(0,0)
 var camera_sensivity = 0.001
@@ -14,6 +15,8 @@ var grabbing: bool = false
 var hasTarget: bool = false
 
 var grabbingObject: PickableObject = null
+var pointedObject: PickableObject = null
+var pointedArea: PlacedArea = null
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -32,10 +35,37 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		var mouse_event = event.relative * camera_sensivity
 		camera_look(mouse_event)
+	
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if grabbing: grabbing = false
-			if hasTarget: grabbing = true
+			if grabbing:
+#				if pointedObject as PlacedArea:
+				if pointedArea:
+					print( "Pointed Area: " + str(pointedArea))
+					if pointedArea.typeAreaName == grabbingObject.typeObjectName:
+						print("Achou seu lugar no mundo")
+#						grabbingObject.global_position = pointedArea.global_position
+						grabbingObject.set_physics_process(false);
+						
+						grabbingObject.transform.basis = pointedArea.get_node("Marker3D").transform.basis
+#						grabbingObject.position.x = move_toward(actualPosition.x, targetPosition.x, 1)
+#						grabbingObject.position.y = move_toward(actualPosition.y, targetPosition.y, 1)
+#						grabbingObject.position.z = move_toward(actualPosition.z, targetPosition.z, 1)
+					
+				else:
+					print("Tentei desligar o grabbing")
+					grabbingObject.set_physics_process(true)
+					grabbingObject.apply_impulse(Vector3.UP * 5)
+	#				transform.basis = Basis()
+	#				grabbingObject.apply_impulse(Vector3(0, 10, 0))
+	
+				grabbingObject = null
+				grabbing = false
+				
+			if pointedObject as PickableObject:
+				grabbingObject = pointedObject;
+				grabbing = true;
 
 func camera_look(mouse_movement):
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -79,21 +109,26 @@ func _physics_process(delta):
 	
 	if grabbing:
 #		grabbingObject.is_pointed = false
+		grabbingObject.set_physics_process(false);
 		var actualPosition = grabbingObject.position
-		var targetPosition = $MainCamera/Area3D/GrabbingPointer.global_position;
+		var targetPosition = $Camera/MainCamera/Area3D/GrabbingPointer.global_position;
 		grabbingObject.position.x = move_toward(actualPosition.x, targetPosition.x, 1)
 		grabbingObject.position.y = move_toward(actualPosition.y, targetPosition.y, 1)
 		grabbingObject.position.z = move_toward(actualPosition.z, targetPosition.z, 1)
 
 func _on_area_3d_body_entered(body):
+	print(body)
 	if body is PickableObject:
 		hasTarget = true
+		pointedObject = body;
 		
-		grabbingObject = body;
+	if body is PlacedArea:
+		pointedArea = body
 		
 func _on_area_3d_body_exited(body):
 	if body is PickableObject:
 		hasTarget = false
+		pointedObject = null
 		
-		if body != grabbingObject:
-			grabbingObject = null
+	if body is PlacedArea:
+		pointedArea = null
