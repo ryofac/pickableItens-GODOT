@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3 uid="uid://cctrsafw7o4i1"]
+
+[ext_resource type="PackedScene" uid="uid://diipowf8nx5ks" path="res://Objects/PickableObject.tscn" id="1_smiqe"]
+[ext_resource type="Script" path="res://Objects/Board.gd" id="2_hsipm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_yspsv"]
+size = Vector3(1, 0.05, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c7rgg"]
+size = Vector3(1.1, 0.1, 1.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7plnj"]
+cull_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 0, 1)
+disable_receive_shadows = true
+grow = true
+grow_amount = 0.008
+
+[sub_resource type="BoxMesh" id="BoxMesh_1ylvq"]
+material = SubResource("StandardMaterial3D_7plnj")
+size = Vector3(1, 0.05, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5txyp"]
+size = Vector3(1, 0.05, 1)
+
+[node name="Board" instance=ExtResource("1_smiqe")]
+script = ExtResource("2_hsipm")
+
+[node name="MeshInstance3D" parent="." index="0"]
+mesh = SubResource("BoxMesh_yspsv")
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("BoxShape3D_c7rgg")
+
+[node name="MeshHighlight" parent="Highligh" index="0"]
+mesh = SubResource("BoxMesh_1ylvq")
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+shape = SubResource("BoxShape3D_5txyp")

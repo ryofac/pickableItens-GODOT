@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://cmllx6ty45uws"]
+[gd_scene load_steps=15 format=3 uid="uid://cmllx6ty45uws"]
 
 [ext_resource type="Texture2D" uid="uid://bs8atlepclylh" path="res://grids/Green/texture_02.png" id="1_qo5y1"]
 [ext_resource type="PackedScene" uid="uid://dsu3l4lt7sx1n" path="res://player.tscn" id="1_xgswk"]
 [ext_resource type="PackedScene" uid="uid://dba7s1aemlte8" path="res://Objects/sphere.tscn" id="2_4hr8h"]
 [ext_resource type="PackedScene" uid="uid://ckm6gdslpjfbl" path="res://Areas/sphere_area.tscn" id="4_g0kfe"]
+[ext_resource type="PackedScene" uid="uid://cctrsafw7o4i1" path="res://Objects/Board.tscn" id="5_1xj2u"]
+[ext_resource type="PackedScene" uid="uid://td1winu1ml77" path="res://Areas/board_area.tscn" id="6_sn446"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_utn1t"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -25,8 +27,8 @@ uv1_triplanar = true
 [sub_resource type="BoxMesh" id="BoxMesh_onfji"]
 size = Vector3(50, 1, 50)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vynk7"]
-points = PackedVector3Array(-25, -0.5, -25, -25, 0.5, -25, 25, -0.5, -25, -25, -0.5, 25, -25, 0.5, 25, 25, 0.5, -25, 25, -0.5, 25, 25, 0.5, 25)
+[sub_resource type="BoxShape3D" id="BoxShape3D_neww4"]
+size = Vector3(50, 1.1, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ej3v"]
 albedo_color = Color(1, 0, 1, 1)
@@ -51,7 +53,7 @@ material_override = SubResource("StandardMaterial3D_rk27m")
 mesh = SubResource("BoxMesh_onfji")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_vynk7")
+shape = SubResource("BoxShape3D_neww4")
 
 [node name="Player" parent="." instance=ExtResource("1_xgswk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.15398, 0, 5.47995)
@@ -69,7 +71,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.60578, 0.381667, 5.35293)
 surface_material_override/0 = SubResource("StandardMaterial3D_asm8y")
 
 [node name="SphereArea" parent="." instance=ExtResource("4_g0kfe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.346022, -2)
+transform = Transform3D(0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 0, 0, 1, 4, 1.34602, -2)
+
+[node name="Board" parent="." instance=ExtResource("5_1xj2u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.83848, 0.273928, -6.08222)
+
+[node name="Board2" parent="." instance=ExtResource("5_1xj2u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.55058, 0.273928, -6.08222)
+
+[node name="Board3" parent="." instance=ExtResource("5_1xj2u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.55058, 0.273928, -4.70074)
+
+[node name="BoardArea" parent="." instance=ExtResource("6_sn446")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 6.102, 0.651562, -6.182)
+
+[node name="BoardArea2" parent="." instance=ExtResource("6_sn446")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 6.102, 0.651562, -5.182)
+
+[node name="BoardArea3" parent="." instance=ExtResource("6_sn446")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.102, 1.18267, -5.68886)
 
 [editable path="Sphere"]
 [editable path="Sphere2"]

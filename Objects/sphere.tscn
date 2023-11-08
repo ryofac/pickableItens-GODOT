@@ -1,42 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://dba7s1aemlte8"]
+[gd_scene load_steps=9 format=3 uid="uid://dba7s1aemlte8"]
 
 [ext_resource type="PackedScene" uid="uid://diipowf8nx5ks" path="res://Objects/PickableObject.tscn" id="1_do6yx"]
 [ext_resource type="Script" path="res://Objects/sphere.gd" id="2_eo2ql"]
+[ext_resource type="Material" uid="uid://bldcw7evi4wb" path="res://Objects/highlight_material.tres" id="3_l2eb7"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_ggb16"]
-radius = 0.25
-height = 0.5
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_36iat"]
+rough = true
+bounce = 1.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_0cgkc"]
-radius = 0.267716
+[sub_resource type="SphereMesh" id="SphereMesh_4csu0"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_lyq4s"]
-radius = 0.26924
+[sub_resource type="SphereShape3D" id="SphereShape3D_p3ook"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yugst"]
-cull_mode = 1
-shading_mode = 0
-albedo_color = Color(1, 1, 0, 1)
-disable_receive_shadows = true
-grow = true
-grow_amount = 0.015
+[sub_resource type="SphereMesh" id="SphereMesh_xli34"]
+material = ExtResource("3_l2eb7")
 
-[sub_resource type="SphereMesh" id="SphereMesh_315mn"]
-material = SubResource("StandardMaterial3D_yugst")
-radius = 0.25
-height = 0.5
+[sub_resource type="SphereShape3D" id="SphereShape3D_8b22n"]
+radius = 0.52253
 
 [node name="Sphere" instance=ExtResource("1_do6yx")]
+inertia = Vector3(1, 0, 0)
+physics_material_override = SubResource("PhysicsMaterial_36iat")
 script = ExtResource("2_eo2ql")
 
 [node name="MeshInstance3D" parent="." index="0"]
-mesh = SubResource("SphereMesh_ggb16")
-
-[node name="CollisionShape3D" parent="MeshInstance3D/Area3D" index="0"]
-shape = SubResource("SphereShape3D_0cgkc")
+mesh = SubResource("SphereMesh_4csu0")
 
 [node name="CollisionShape3D" parent="." index="1"]
-shape = SubResource("SphereShape3D_lyq4s")
+shape = SubResource("SphereShape3D_p3ook")
 
 [node name="MeshHighlight" parent="Highligh" index="0"]
-mesh = SubResource("SphereMesh_315mn")
+mesh = SubResource("SphereMesh_xli34")
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+shape = SubResource("SphereShape3D_8b22n")

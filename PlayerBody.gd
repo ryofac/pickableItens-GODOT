@@ -4,6 +4,7 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+
 @onready var mainCamera = $Camera
 
 
@@ -42,30 +43,13 @@ func _input(event):
 			if grabbing:
 #				if pointedObject as PlacedArea:
 				if pointedArea:
-					print( "Pointed Area: " + str(pointedArea))
 					if pointedArea.typeAreaName == grabbingObject.typeObjectName:
-						print("Achou seu lugar no mundo")
-#						grabbingObject.global_position = pointedArea.global_position
-						grabbingObject.set_physics_process(false);
-						
-						grabbingObject.transform.basis = pointedArea.get_node("Marker3D").transform.basis
-#						grabbingObject.position.x = move_toward(actualPosition.x, targetPosition.x, 1)
-#						grabbingObject.position.y = move_toward(actualPosition.y, targetPosition.y, 1)
-#						grabbingObject.position.z = move_toward(actualPosition.z, targetPosition.z, 1)
-					
+						place_object()
 				else:
-					print("Tentei desligar o grabbing")
-					grabbingObject.set_physics_process(true)
-					grabbingObject.apply_impulse(Vector3.UP * 5)
-	#				transform.basis = Basis()
-	#				grabbingObject.apply_impulse(Vector3(0, 10, 0))
-	
-				grabbingObject = null
-				grabbing = false
+					drop_object()
 				
 			if pointedObject as PickableObject:
-				grabbingObject = pointedObject;
-				grabbing = true;
+				grab_object() 
 
 func camera_look(mouse_movement):
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -76,6 +60,7 @@ func camera_look(mouse_movement):
 	mainCamera.transform.basis = Basis();
 	self.rotate_object_local(Vector3(0, 1, 0), -camera_rotation.x)
 	mainCamera.rotate_object_local(Vector3(1,0,0), -camera_rotation.y)
+#	mainCamera.rotation.x = clamp(mainCamera.rotation.x, deg_to_rad(-40), deg_to_rad(60))
 	
 	
 func handle_movement(delta):
@@ -90,7 +75,7 @@ func handle_movement(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_front", "move_back")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-#	print(direction)
+
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -109,26 +94,50 @@ func _physics_process(delta):
 	
 	if grabbing:
 #		grabbingObject.is_pointed = false
-		grabbingObject.set_physics_process(false);
-		var actualPosition = grabbingObject.position
-		var targetPosition = $Camera/MainCamera/Area3D/GrabbingPointer.global_position;
-		grabbingObject.position.x = move_toward(actualPosition.x, targetPosition.x, 1)
-		grabbingObject.position.y = move_toward(actualPosition.y, targetPosition.y, 1)
-		grabbingObject.position.z = move_toward(actualPosition.z, targetPosition.z, 1)
+		var targetPosition = $Camera/MainCamera/Area3D/GrabbingPointer.global_transform;
+		grabbingObject.update_target_position(targetPosition)
 
+func place_object(): 
+	var target = pointedArea.get_node("Marker3D").global_transform # Coleta a posição e rotação exata da area selecionada
+	grabbingObject.update_target_position(target) # Atualiza a posição na qual o objeto vai se aproximar a cada loop na process
+
+	grabbingObject.positioned = true # Define que o objeto está posicionado
+	grabbingObject.picked = false # Define que o objeto não está sendo segurado pelo player
+	grabbingObject = null # Define que não existe mais um objeto sendo segurado
+	grabbing = false
+	Global.setPickedObject(grabbingObject)
+	
+func drop_object():
+	grabbingObject.picked = false
+	grabbingObject.apply_central_force((global_transform.basis * Vector3.FORWARD) * 300)
+	grabbingObject = null
+	grabbing = false
+	Global.setPickedObject(grabbingObject)
+	
+func grab_object():
+	grabbingObject = pointedObject;
+	grabbingObject.picked = true
+	grabbingObject.positioned = false
+	grabbing = true
+	Global.setPickedObject(grabbingObject)
 func _on_area_3d_body_entered(body):
 	print(body)
 	if body is PickableObject:
 		hasTarget = true
 		pointedObject = body;
-		
-	if body is PlacedArea:
-		pointedArea = body
+
 		
 func _on_area_3d_body_exited(body):
 	if body is PickableObject:
 		hasTarget = false
 		pointedObject = null
+
+func _on_area_3d_area_entered(area):
+	if area.is_in_group("placed_area"):
+		pointedArea = area.get_parent();
 		
-	if body is PlacedArea:
+
+
+func _on_area_3d_area_exited(area):
+	if area.is_in_group("placed_area"):
 		pointedArea = null

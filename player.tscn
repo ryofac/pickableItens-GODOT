@@ -24,14 +24,15 @@ shape = SubResource("CapsuleShape3D_6v5x8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.688291, 0)
 current = true
 
-[node name="Area3D" type="Area3D" parent="PlayerBody/Camera/MainCamera"]
+[node name="Area3D" type="Area3D" parent="PlayerBody/Camera/MainCamera" groups=["RayCastPlayer"]]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerBody/Camera/MainCamera/Area3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 shape = SubResource("SeparationRayShape3D_443mq")
 
 [node name="GrabbingPointer" type="Marker3D" parent="PlayerBody/Camera/MainCamera/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.493564, -0.352877, -0.65667)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0550801, -0.200307, -1.21745)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerBody/Camera/MainCamera/Area3D/GrabbingPointer"]
@@ -70,5 +71,7 @@ text = "+
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="area_entered" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_area_entered"]
+[connection signal="area_exited" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_area_exited"]
 [connection signal="body_entered" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="PlayerBody/Camera/MainCamera/Area3D" to="PlayerBody" method="_on_area_3d_body_exited"]

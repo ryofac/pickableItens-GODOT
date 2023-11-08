@@ -1,35 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://ckm6gdslpjfbl"]
+[gd_scene load_steps=7 format=3 uid="uid://ckm6gdslpjfbl"]
 
 [ext_resource type="PackedScene" uid="uid://bie00x0ig2nw" path="res://Areas/PlacedArea.tscn" id="1_121re"]
 [ext_resource type="Shader" uid="uid://bxgwg85dytluf" path="res://Shaders/Sphere.tres" id="2_mnhd0"]
 [ext_resource type="Script" path="res://Areas/sphere_area.gd" id="2_yu4ne"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_xglux"]
-radius = 0.253074
+[sub_resource type="SphereShape3D" id="SphereShape3D_m87mi"]
+radius = 0.620188
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p3sl6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivgie"]
 render_priority = 0
 shader = ExtResource("2_mnhd0")
 shader_parameter/rim_sharpress = 3.0
 shader_parameter/emission_color = Color(1, 0.788235, 0, 1)
 shader_parameter/emission_amount = 5.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_x68oe"]
-material = SubResource("ShaderMaterial_p3sl6")
-radius = 0.25
-height = 0.5
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_mpkac"]
-radius = 0.261521
+[sub_resource type="SphereMesh" id="SphereMesh_4fg3n"]
+material = SubResource("ShaderMaterial_ivgie")
 
 [node name="SphereArea" instance=ExtResource("1_121re")]
 script = ExtResource("2_yu4ne")
 
 [node name="CollisionShape3D" parent="Area3D" index="0"]
-shape = SubResource("SphereShape3D_xglux")
+shape = SubResource("SphereShape3D_m87mi")
 
 [node name="MeshInstance3D" parent="." index="2"]
-mesh = SubResource("SphereMesh_x68oe")
-
-[node name="CollisionShape3D" parent="." index="3"]
-shape = SubResource("SphereShape3D_mpkac")
+mesh = SubResource("SphereMesh_4fg3n")

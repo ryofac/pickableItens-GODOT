@@ -1,0 +1,28 @@
+[gd_scene load_steps=7 format=3 uid="uid://td1winu1ml77"]
+
+[ext_resource type="PackedScene" uid="uid://bie00x0ig2nw" path="res://Areas/PlacedArea.tscn" id="1_ynyvg"]
+[ext_resource type="Script" path="res://Areas/board_area.gd" id="2_x1u64"]
+[ext_resource type="Shader" uid="uid://bxgwg85dytluf" path="res://Shaders/Sphere.tres" id="3_c68ih"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l5jxj"]
+size = Vector3(1, 0.05, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2y0pf"]
+render_priority = 0
+shader = ExtResource("3_c68ih")
+shader_parameter/rim_sharpress = 3.0
+shader_parameter/emission_color = Color(1, 0.788235, 0, 1)
+shader_parameter/emission_amount = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_gauf7"]
+material = SubResource("ShaderMaterial_2y0pf")
+size = Vector3(1, 0.05, 1)
+
+[node name="BoardArea" instance=ExtResource("1_ynyvg")]
+script = ExtResource("2_x1u64")
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+shape = SubResource("BoxShape3D_l5jxj")
+
+[node name="MeshInstance3D" parent="." index="2"]
+mesh = SubResource("BoxMesh_gauf7")
